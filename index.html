@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Soumatome N3 Kanji - Tuần 7 (Ngày 1-2)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background: linear-gradient(rgba(255, 245, 247, 0.75), rgba(240, 220, 225, 0.85)),
+                        url('https://images.unsplash.com/photo-1522383225653-ed111181a951?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 12px;
+            overflow-x: hidden;
+        }
+
+        .sakura-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .petal {
+            position: absolute; background: #ffb7c5; border-radius: 15px 0 15px 0; opacity: 0.75;
+            filter: drop-shadow(0 2px 4px rgba(216, 90, 127, 0.2)); animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translate(0, -10px) rotate(0deg); opacity: 0.8; }
+            100% { transform: translate(80px, 105vh) rotate(360deg); opacity: 0; }
+        }
+
+        .app-card {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 20px 16px;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 30px rgba(180, 100, 120, 0.15);
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Tiêu đề Căn Giữa Dàn Đều */
+        .main-title-block {
+            text-align: center;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            border-bottom: 2px dashed #f2d5db;
+        }
+        .main-title-sub {
+            font-size: 11px;
+            color: #b06d7e;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+        .main-title-kanji {
+            color: #d85a7f;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: #b06d7e; margin-bottom: 8px; }
+
+        /* Progress Bar */
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: #f2d5db;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #e07a9e, #d85a7f);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        /* Setup Panel */
+        .setup-panel { display: flex; flex-direction: column; gap: 14px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 13px; font-weight: 700; color: #d85a7f; }
+        select {
+            width: 100%; padding: 12px; border: 1.5px solid #f2d5db; border-radius: 12px;
+            font-size: 15px; outline: none; background: #fff5f7; color: #3a2e30; font-weight: 600;
+        }
+
+        /* Question Card */
+        .question-card {
+            background: #fff5f7;
+            border-left: 4px solid #d85a7f;
+            padding: 24px 14px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .q-word { font-size: 32px; font-weight: 700; color: #3a2e30; word-break: break-all; }
+
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .opt-btn {
+            display: flex; align-items: center; justify-content: center; background: #ffffff;
+            border: 1.5px solid #f2d5db; color: #4a383b; padding: 14px 8px; border-radius: 12px;
+            font-size: 16px; font-weight: 700; cursor: pointer; text-align: center; line-height: 1.3;
+        }
+        .opt-btn:active { background: #fff0f3; border-color: #d85a7f; }
+        .opt-btn.correct { background: #e8f5e9 !important; border-color: #66bb6a !important; color: #2e7d32 !important; }
+        .opt-btn.wrong { background: #ffebee !important; border-color: #ef5350 !important; color: #c62828 !important; }
+
+        /* Explanation Box */
+        .explanation-box { background: #ffffff; border: 1px dashed #d85a7f; border-radius: 12px; padding: 12px; margin-top: 12px; }
+        .exp-title { font-size: 11px; font-weight: 700; color: #d85a7f; text-transform: uppercase; margin-bottom: 4px; }
+        .exp-detail { font-size: 15px; font-weight: 700; color: #3a2e30; margin-bottom: 6px; }
+        .exp-ex-jp { font-size: 14px; font-weight: 600; color: #d85a7f; margin-bottom: 2px; }
+        .exp-ex-vi { font-size: 13px; color: #666; line-height: 1.4; }
+
+        .feedback { display: none; margin-top: 14px; }
+        .btn-primary {
+            display: block; width: 100%; margin-top: 12px; background: linear-gradient(135deg, #e07a9e 0%, #d85a7f 100%);
+            color: white; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center;
+        }
+
+        /* Result Screen */
+        .result-panel { display: none; text-align: center; padding: 10px 0; }
+        .result-icon { font-size: 50px; margin-bottom: 10px; }
+        .result-score { font-size: 22px; font-weight: 700; color: #d85a7f; margin-bottom: 8px; }
+        .result-msg { font-size: 14px; color: #555; margin-bottom: 20px; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+    <div class="sakura-container" id="sakura-box"></div>
+
+    <div class="app-card">
+        <!-- Tiêu đề Căn Giữa Dàn Đều -->
+        <div class="main-title-block">
+            <div class="main-title-sub">SOUMATOME N3</div>
+            <div class="main-title-kanji">🌸 KANJI 🌸</div>
+        </div>
+
+        <!-- Panel Cài đặt -->
+        <div class="setup-panel" id="setup-panel">
+            <div style="text-align:center; font-weight:700; color:#b06d7e; font-size:16px;">Tuần 7 ・ Ngày 1–2</div>
+            <div class="form-group">
+                <label>Số câu mỗi lượt</label>
+                <select id="select-count">
+                    <option value="10">10 câu</option>
+                    <option value="20" selected>20 câu</option>
+                    <option value="all">Tất cả (26 câu)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Dạng câu hỏi</label>
+                <select id="select-mode">
+                    <option value="kanji-to-reading">Kanji ➔ Cách đọc (Hiragana)</option>
+                    <option value="reading-to-kanji">Cách đọc (Hiragana) ➔ Kanji</option>
+                    <option value="mix" selected>Trộn 2 chiều ngẫu nhiên</option>
+                </select>
+            </div>
+            <button class="btn-primary" onclick="startGame()">Bắt đầu luyện tập ➔</button>
+        </div>
+
+        <!-- Panel Làm bài -->
+        <div id="game-panel" style="display: none;">
+            <div class="header">
+                <span id="q-count">Câu 1 / 20</span>
+                <span id="score-count">Điểm: 0</span>
+            </div>
+
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+
+            <div class="question-card">
+                <div class="q-word" id="q-word">自然</div>
+            </div>
+
+            <div class="options-grid" id="options-box"></div>
+
+            <div class="feedback" id="feedback">
+                <div id="result-status" style="font-weight: 700; text-align: center; font-size: 15px; margin-bottom: 8px;"></div>
+                <div class="explanation-box">
+                    <div class="exp-title">📌 Từ vựng & Đáp án chuẩn:</div>
+                    <div class="exp-detail" id="exp-detail"></div>
+                    <div class="exp-title">🌸 Ví dụ trong sách Soumatome:</div>
+                    <div class="exp-ex-jp" id="exp-ex-jp"></div>
+                    <div class="exp-ex-vi" id="exp-ex-vi"></div>
+                </div>
+                <button class="btn-primary" onclick="nextQuestion()">Câu tiếp theo ➔</button>
+            </div>
+        </div>
+
+        <!-- Panel Kết quả chúc mừng -->
+        <div class="result-panel" id="result-panel">
+            <div class="result-icon">🎉</div>
+            <div style="font-weight: 700; color: #3a2e30; font-size: 18px;">HOÀN THÀNH BÀI HỌC!</div>
+            <div class="result-score" id="final-score">0 / 200 ĐIỂM</div>
+            <div class="result-msg" id="final-msg">Chúc mừng bạn đã hoàn thành xuất sắc từ vựng Soumatome N3 Tuần 7 Ngày 1–2!</div>
+            <button class="btn-primary" onclick="resetSetup()">Luyện tập lại ↺</button>
+        </div>
+    </div>
+
+    <script>
+        function createPetal() {
+            const box = document.getElementById('sakura-box');
+            if(!box) return;
+            const p = document.createElement('div');
+            p.classList.add('petal');
+            p.style.width = Math.random() * 6 + 6 + 'px';
+            p.style.height = Math.random() * 8 + 8 + 'px';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = Math.random() * 3 + 5 + 's';
+            box.appendChild(p);
+            setTimeout(() => p.remove(), 8000);
+        }
+        setInterval(createPetal, 500);
+
+        // Dữ liệu chuẩn từ Soumatome N3 Kanji Tuần 7 Ngày 1 (Nature & Environment) & Ngày 2 (Weather & Climate)
+        const rawData = [
+            { kanji: "自然", reading: "しぜん", hanviet: "TỰ NHIÊN", meaning: "tự nhiên, thiên nhiên", exJp: "豊かな自然を守る。", exVi: "Bảo vệ thiên nhiên phong phú." },
+            { kanji: "自然科学", reading: "しぜんかがく", hanviet: "TỰ NHIÊN KHOA HỌC", meaning: "khoa học tự nhiên", exJp: "大学で自然科学を専攻する。", exVi: "Học chuyên ngành khoa học tự nhiên ở đại học." },
+            { kanji: "天然", reading: "てんねん", hanviet: "THIÊN NHIÊN", meaning: "thiên nhiên, tự nhiên (vật liệu/sản phẩm)", exJp: "天然のガスを利用する。", exVi: "Sử dụng khí đốt tự nhiên." },
+            { kanji: "環境", reading: "かんきょう", hanviet: "HOÀN CẢNH", meaning: "môi trường", exJp: "地球環境に優しい生活をする。", exVi: "Sống thân thiện với môi trường trái đất." },
+            { kanji: "地球", reading: "ちきゅう", hanviet: "ĐỊA CẦU", meaning: "trái đất, địa cầu", exJp: "地球の温暖化が進む。", exVi: "Sự nóng lên của trái đất đang tiến triển." },
+            { kanji: "電球", reading: "でんきゅう", hanviet: "ĐIỆN CẦU", meaning: "bóng đèn điện", exJp: "部屋の電球を交換する。", exVi: "Thay bóng đèn điện trong phòng." },
+            { kanji: "球", reading: "たま", hanviet: "CẦU", meaning: "quả bóng, hình cầu", exJp: "球を投げる。", exVi: "Ném quả bóng." },
+            { kanji: "温暖化", reading: "おんだんか", hanviet: "ÔN NÕAN HÓA", meaning: "sự nóng lên toàn cầu", exJp: "地球温暖化を防ぐ対策。", exVi: "Biện pháp ngăn chặn sự nóng lên của trái đất." },
+            { kanji: "温かい", reading: "あたたかい", hanviet: "ÔN", meaning: "ấm áp (thời tiết/vật)", exJp: "温かいスープを飲む。", exVi: "Uống món súp ấm nóng." },
+            { kanji: "気温", reading: "きおん", hanviet: "KHÍ ÔN", meaning: "nhiệt độ không khí", exJp: "日中の気温が上がる。", exVi: "Nhiệt độ không khí ban ngày tăng lên." },
+            { kanji: "湿度", reading: "しつど", hanviet: "THẤP ĐỘ", meaning: "độ ẩm", exJp: "夏は湿度が高くて蒸し暑い。", exVi: "Mùa hè độ ẩm cao nên oi nóng." },
+            { kanji: "湿気", reading: "しっけ", hanviet: "THẤP KHÍ", meaning: "hơi ẩm, độ ẩm thấp", exJp: "部屋の湿気を払う。", exVi: "Đánh bay hơi ẩm trong phòng." },
+            { kanji: "湿る", reading: "しめる", hanviet: "THẤP", meaning: "ẩm ướt", exJp: "洗濯物がまだ湿っている。", exVi: "Quần áo giặt vẫn còn ẩm ướt." },
+            { kanji: "洪水", reading: "こうずい", hanviet: "HỒNG THỦY", meaning: "lũ lụt, hồng thủy", exJp: "大雨で洪水が発生する。", exVi: "Lũ lụt xảy ra do mưa lớn." },
+            { kanji: "津波", reading: "つなみ", hanviet: "TÂN BA", meaning: "sóng thần", exJp: "地震の後に津波が来る。", exVi: "Sóng thần kéo đến sau trận động đất." },
+            { kanji: "津々浦々", reading: "つつうらうら", hanviet: "TÂN PHỔ", meaning: "khắp nơi, mọi ngóc ngách", exJp: "全国津々浦々に広がる。", exVi: "Lan rộng ra khắp mọi ngóc ngách cả nước." },
+            { kanji: "波", reading: "なみ", hanviet: "BA", meaning: "sóng, làn sóng", exJp: "高い波が押し寄せる。", exVi: "Những làn sóng cao ập tới." },
+            { kanji: "電波", reading: "でんぱ", hanviet: "ĐIỆN BA", meaning: "sóng điện, sóng điện thoại", exJp: "携帯電話の電波が弱い。", exVi: "Sóng điện thoại di động yếu." },
+            { kanji: "大波", reading: "おおなみ", hanviet: "ĐẠI BA", meaning: "sóng lớn", exJp: "大波が船を揺らす。", exVi: "Sóng lớn rung lắc con tàu." },
+            { kanji: "気候", reading: "きこう", hanviet: "KHÍ HẬU", meaning: "khí hậu", exJp: "日本の温暖な気候。", exVi: "Khí hậu ấm áp của Nhật Bản." },
+            { kanji: "天候", reading: "てんこう", hanviet: "THIÊN HẬU", meaning: "thời tiết", exJp: "天候に恵まれて旅行を楽しむ。", exVi: "Được thời tiết ủng hộ nên tận hưởng chuyến du lịch." },
+            { kanji: "季節", reading: "きせつ", hanviet: "QUÝ TIẾT", meaning: "mùa, thời tiết theo mùa", exJp: "四季折々の季節を楽しむ。", exVi: "Tận hưởng từng mùa trong bốn mùa." },
+            { kanji: "四季", reading: "しき", hanviet: "TỨ QUÝ", meaning: "bốn mùa", exJp: "日本には美しい四季がある。", exVi: "Nhật Bản có bốn mùa tuyệt đẹp." },
+            { kanji: "暴風", reading: "ぼうふう", hanviet: "BẠO PHONG", meaning: "cuồng phong, gió bão", exJp: "暴風警報が発令される。", exVi: "Cảnh báo cuồng phong được phát ra." },
+            { kanji: "暴れる", reading: "あばれる", hanviet: "BẠO", meaning: "nổi giận, quậy phá, hoành hành", exJp: "酔っぱらいが街で暴れる。", exVi: "Kẻ say rượu quậy phá trên phố." },
+            { kanji: "太陽", reading: "たいよう", hanviet: "THÁI DƯƠNG", meaning: "mặt trời", exJp: "太陽の光を浴びる。", exVi: "Tắm ánh nắng mặt trời." }
+        ];
+
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let score = 0;
+        let canInteract = true;
+
+        function startGame() {
+            const countVal = document.getElementById('select-count').value;
+            const modeVal = document.getElementById('select-mode').value;
+
+            let list = [...rawData].sort(() => Math.random() - 0.5);
+            let selectedCount = countVal === 'all' ? list.length : parseInt(countVal);
+            list = list.slice(0, Math.min(selectedCount, list.length));
+
+            currentQuestions = list.map(item => {
+                let isKanjiToReading = modeVal === 'kanji-to-reading' ? true :
+                                       modeVal === 'reading-to-kanji' ? false :
+                                       Math.random() < 0.5;
+
+                return {
+                    raw: item,
+                    question: isKanjiToReading ? item.kanji : item.reading,
+                    answer: isKanjiToReading ? item.reading : item.kanji,
+                    isKanjiToReading: isKanjiToReading
+                };
+            });
+
+            currentIndex = 0;
+            score = 0;
+            document.getElementById('setup-panel').style.display = 'none';
+            document.getElementById('game-panel').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            canInteract = true;
+            document.getElementById('feedback').style.display = 'none';
+            const item = currentQuestions[currentIndex];
+
+            // Progress Bar & Count
+            const progressPercent = ((currentIndex) / currentQuestions.length) * 100;
+            document.getElementById('progress-fill').style.width = progressPercent + '%';
+            document.getElementById('q-count').innerText = `Câu ${currentIndex + 1} / ${currentQuestions.length}`;
+            document.getElementById('score-count').innerText = `Điểm: ${score}`;
+            document.getElementById('q-word').innerText = item.question;
+
+            const optionsBox = document.getElementById('options-box');
+            optionsBox.innerHTML = '';
+
+            let options = [item.answer];
+            while (options.length < 4) {
+                let randItem = rawData[Math.floor(Math.random() * rawData.length)];
+                let wrongAns = item.isKanjiToReading ? randItem.reading : randItem.kanji;
+                if (!options.includes(wrongAns) && wrongAns !== item.answer) {
+                    options.push(wrongAns);
+                }
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(btn, opt === item.answer);
+                optionsBox.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(btn, isCorrect) {
+            if (!canInteract) return;
+            canInteract = false;
+
+            const item = currentQuestions[currentIndex];
+            const statusEl = document.getElementById('result-status');
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                score += 10;
+                statusEl.innerHTML = `<span style="color: #4caf50;">✓ 正解 (Chính xác!)</span>`;
+            } else {
+                btn.classList.add('wrong');
+                statusEl.innerHTML = `<span style="color: #ef5350;">✕ ざんねん (Đáp án đúng là: ${item.answer})</span>`;
+            }
+
+            document.getElementById('exp-detail').innerText = `${item.raw.kanji} 【${item.raw.reading}】 : ${item.raw.meaning} (${item.raw.hanviet})`;
+            document.getElementById('exp-ex-jp').innerText = item.raw.exJp;
+            document.getElementById('exp-ex-vi').innerText = item.raw.exVi;
+            document.getElementById('score-count').innerText = `Điểm: ${score}`;
+            document.getElementById('feedback').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            if (currentIndex < currentQuestions.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            document.getElementById('progress-fill').style.width = '100%';
+            document.getElementById('game-panel').style.display = 'none';
+            document.getElementById('result-panel').style.display = 'block';
+            document.getElementById('final-score').innerText = `${score} / ${currentQuestions.length * 10} ĐIỂM`;
+        }
+
+        function resetSetup() {
+            document.getElementById('result-panel').style.display = 'none';
+            document.getElementById('setup-panel').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
